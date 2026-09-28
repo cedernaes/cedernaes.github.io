@@ -5,6 +5,9 @@
   --muted: #6a6a64;
   --accent: #2e6b4c;
   --rule: #dcdbd4;
+  --aura-1: #17a673;
+  --aura-2: #0fa3b8;
+  --aura-3: #3a7bd5;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -13,6 +16,9 @@
     --muted: #9b9b94;
     --accent: #86c7a4;
     --rule: #2c2c29;
+    --aura-1: #4ee6a0;
+    --aura-2: #3fdcec;
+    --aura-3: #74a7ff;
   }
 }
 
@@ -48,6 +54,9 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 h1::after {
@@ -60,34 +69,63 @@ h1::after {
   border-radius: 2px;
 }
 
-/* Hover: a white bar with difference blending sweeps in from the left,
-   inverting whatever is under it, then exits to the right. */
+/* Hover aura around the heading, in the spirit of edge lighting: a ring of
+   flowing colour hugging the word, with a soft bloom and ripples that pulse
+   outward. script.js adds the .aura element and drives it from pointer
+   movement via --glow (0-1), --push (how far the ring swells), --spin (colour
+   flow) and --x/--y (the cursor, which the glow is weighted towards). */
 h1 span {
   position: relative;
   display: inline-block;
-  padding: 0.1em 0.15em;
-  margin: -0.1em -0.15em;
 }
 
-h1 span::before {
-  content: "";
+.aura {
+  --gap-y: 0.1em;  /* distance from the word to the ring */
+  --gap-x: 0.35em;
+  --room: 48px;    /* space around the ring for the bloom and ripples */
+  position: absolute;
+  inset: calc(-1 * (var(--gap-y) + var(--room))) calc(-1 * (var(--gap-x) + var(--room)));
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--glow, 0);
+  mask-image: radial-gradient(circle 160px at var(--x, 50%) var(--y, 50%),
+    #000, rgb(0 0 0 / 0.45) 50%, rgb(0 0 0 / 0.1));
+}
+
+.aura-bloom {
   position: absolute;
   inset: 0;
-  background: #fff;
-  mix-blend-mode: difference;
-  pointer-events: none;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  filter: blur(12px);
 }
 
-h1 span:hover::before {
-  transform: scaleX(1);
-  transform-origin: left;
+/* The ring itself: a gradient-filled capsule with its middle masked out,
+   leaving a border of `padding` thickness. */
+.aura::after,
+.aura-bloom::before,
+.aura-ripple {
+  content: "";
+  position: absolute;
+  inset: calc(var(--room) - var(--push, 0px));
+  padding: 2px;
+  border-radius: 999px;
+  background: conic-gradient(from var(--spin, 0deg),
+    var(--aura-1), var(--aura-2), var(--aura-3), var(--aura-2), var(--aura-1));
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  h1 span::before { transition: none; }
+.aura-bloom::before {
+  padding: 8px;
+}
+
+.aura-ripple {
+  animation: aura-ripple 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes aura-ripple {
+  from { inset: var(--room); opacity: 0.9; }
+  to { inset: calc(var(--room) - 36px); opacity: 0; }
 }
 
 .lede {
