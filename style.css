@@ -1,0 +1,132 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f7f6f2;
+  --fg: #1d1d1b;
+  --muted: #6a6a64;
+  --accent: #2e6b4c;
+  --rule: #dcdbd4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131312;
+    --fg: #ebebe6;
+    --muted: #9b9b94;
+    --accent: #86c7a4;
+    --rule: #2c2c29;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: clamp(2.75rem, 9vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+h1::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 3px;
+  margin-top: 1.25rem;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* Hover: a white bar with difference blending sweeps in from the left,
+   inverting whatever is under it, then exits to the right. */
+h1 span {
+  position: relative;
+  display: inline-block;
+  padding: 0.1em 0.15em;
+  margin: -0.1em -0.15em;
+}
+
+h1 span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+h1 span:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  h1 span::before { transition: none; }
+}
+
+.lede {
+  margin: 1rem 0 2rem;
+  max-width: 32rem;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+nav a:hover,
+nav a:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+nav svg { width: 1.1em; height: 1.1em; fill: currentColor; }
+
+footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
