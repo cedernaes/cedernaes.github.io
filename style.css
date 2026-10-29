@@ -137,19 +137,24 @@ h1 span {
 
 nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
   gap: 0.75rem;
+  overflow-x: auto;
 }
 
 nav a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.55rem 1rem;
   border: 1px solid var(--rule);
   border-radius: 999px;
   color: var(--fg);
   text-decoration: none;
+  white-space: nowrap;
   transition: border-color 0.15s, color 0.15s;
 }
 
