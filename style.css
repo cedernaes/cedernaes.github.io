@@ -137,11 +137,11 @@ h1 span {
 
 nav {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
   gap: 0.75rem;
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 nav a {
@@ -165,6 +165,18 @@ nav a:focus-visible {
 }
 
 nav svg { width: 1.1em; height: 1.1em; fill: currentColor; }
+
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  nav a {
+    width: 100%;
+    justify-content: center;
+  }
+}
 
 footer {
   padding: 1.5rem;
